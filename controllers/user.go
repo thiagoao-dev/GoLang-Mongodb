@@ -25,12 +25,7 @@ func NewUserController(s *mgo.Session) *UserController {
 // GetUser retrieves an individual user resouce
 func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
 	// Stub an example user
-	u := models.User{
-		Name:   "Thiago Oliveira",
-		Gender: "Male",
-		Age:    32,
-		Id:     p.ByName("id"),
-	}
+	u := models.User{}
 	
 	// Marshal provided interface into JSON structure
 	uj, _ := json.Marshal(u)
@@ -50,7 +45,7 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, p ht
 	json.NewDecoder(r.Body).Decode(&u)
 	
 	// Add an Id
-	u.Id = bsonNewObjectId()
+	u.Id = bson.NewObjectId()
 	
 	// Write the user to mongo
 	uc.session.DB("go_rest_tutorial").C("users").Insert(u)
