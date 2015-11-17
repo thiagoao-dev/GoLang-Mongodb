@@ -6,6 +6,7 @@ import(
 	"encoding/json"
 
 	"gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2/bson"
 	"github.com/julienschmidt/httprouter"
 	"github.com/thiagoao/GoLang-Mongodb/models"
 )
@@ -49,7 +50,10 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, p ht
 	json.NewDecoder(r.Body).Decode(&u)
 	
 	// Add an Id
-	u.Id = "foo"
+	u.Id = bsonNewObjectId()
+	
+	// Write the user to mongo
+	uc.session.DB("go_rest_tutorial").C("users").Insert(u)
 	
 	// Marshal provided interface into JSON structure
 	uj, _ := json.Marshal(u)
