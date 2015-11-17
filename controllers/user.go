@@ -59,7 +59,13 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, p ht
 	u := models.User{}
 	
 	// Populate the user data
-	json.NewDecoder(r.Body).Decode(&u)
+	err := json.NewDecoder(r.Body).Decode(&u)
+	
+	if err != nil {
+		panic(err)
+		w.WriteHeader(404)
+		return
+	}
 	
 	// Add an Id
 	u.Id = bson.NewObjectId()
