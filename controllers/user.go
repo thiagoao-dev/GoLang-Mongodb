@@ -6,7 +6,7 @@ import(
 	"encoding/json"
 
 	"github.com/julienschmidt/httprouter"
-	"githb.com/thiagoao/GoLang-Mongodb/models"
+	"github.com/thiagoao/GoLang-Mongodb/models"
 )
 
 type (
