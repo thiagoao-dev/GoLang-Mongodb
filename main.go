@@ -20,21 +20,26 @@ func main() {
 	// Get a user resource
 	r.GET("/user/:id", uc.GetUser)
 	
+	// Create a new user
 	r.POST("/user", uc.CreateUser)
 	
+	// Remove an existing user
 	r.DELETE("/user/:id", uc.RemoveUser)
 	
 	// Fire up the server
 	http.ListenAndServe(":8080", r)
 }
 
+// getSession creates a new mongo session and panics if connection error occurs
 func getSession() *mgo.Session {
 	// Connect to your mongo
 	s, err := mgo.Dial("mongodb://golang:golang@ds053944.mongolab.com:53944/golang")
 	
+	// Check if connection error, is mongo running?
 	if err != nil {
 		panic(err)
 	}
 	
+	// Deliver session
 	return s
 }
