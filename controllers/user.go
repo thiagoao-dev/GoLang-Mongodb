@@ -5,17 +5,20 @@ import(
 	"net/http"
 	"encoding/json"
 
+	"gopkg.in/mgo.v2"
 	"github.com/julienschmidt/httprouter"
 	"github.com/thiagoao/GoLang-Mongodb/models"
 )
 
 type (
 	// UserController represents the controller for operating on the User resource
-	UserController struct{}
+	UserController struct{
+		session *mgo.Session
+	}
 )
 
-func NewUserController() *UserController {
-	return &UserController{}
+func NewUserController(s *mgo.Session) *UserController {
+	return &UserController{s}
 }
 
 // GetUser retrieves an individual user resouce
