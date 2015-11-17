@@ -24,8 +24,25 @@ func NewUserController(s *mgo.Session) *UserController {
 
 // GetUser retrieves an individual user resouce
 func (uc UserController) GetUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	// Grab id
+	id := p.ByName("id")
+	
+	if !bson.IsObjectIdHex(id) {
+		w.WriteHeader(404)
+		return
+	}
+	
+	// Grab id
+	oid := bson.ObjectIdHex(id)
+
 	// Stub an example user
 	u := models.User{}
+	
+	// Fetch user
+	if err := uc.session.DB("go_rest_tutorial").C("users").FindId(oid).One(&u); err != nil {
+		w.WriteHeader(404)
+		return
+	}
 	
 	// Marshal provided interface into JSON structure
 	uj, _ := json.Marshal(u)
@@ -61,6 +78,23 @@ func (uc UserController) CreateUser(w http.ResponseWriter, r *http.Request, p ht
 
 // RemoveUser removes an existing user resource
 func (uc UserController) RemoveUser(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
-	// TODO: only write status code now
+	// Grab id
+	id := p.ByName("id")
+	
+	// Verify id is ObjectId, otherwise bail
+	if !bson.IsObjectIdHex(id) {
+		w.WriteHeader(404)
+		return
+	}
+	
+	// Grab id
+	oid := bson.ObjectIdHex(id)
+	
+	// Remove user
+	if err := uc.session.DB("go_rest_tutorial").C("users").RemoveId(oid); err != nil {
+		w.WriteHeader(404)
+		return
+	}
+	
 	w.WriteHeader(200)
 }
